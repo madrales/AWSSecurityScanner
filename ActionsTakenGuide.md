@@ -12,9 +12,8 @@
 - Created the second instance, GreenServer. Will use this as the Control (goal to have 0 flags on this program related to the relevant violations)
 - GOAL: Focus on the security group and IMDSv2 checks first. Run it locally and print raw results to the terminal.
 - Disabled IMDSv2 on RedServer
-- ```#Process to get to InstanceID
-# items = len(response)
-# print(len(response))
-# print(response["Reservations"])
-# print(response["Reservations"][0])
-# print(response["Reservations"][0]["Instances"][0]["InstanceId"])```
+#### May 13th, 2026
+- Used simple if statement to check if the Httpstoken value is optional (indicating IMDVSv2 is required)
+- Accessing nested data structures is easy in python. can be used like ["Reservations"]["Instances"][0]["MetadataType"][HttpsTokens]
+- Created SecurityGroups check for RDP (3389) and SSH (20)
+- 
