@@ -1,6 +1,8 @@
 import boto3
 import datetime as dt
 
+
+
 def run_checks():
     #Open the client to connect to ec2 instances available in AWS
     accessPoint = boto3.client('ec2')
@@ -11,29 +13,31 @@ def run_checks():
 
     #IMP: Check for IMDVSv2, must be required
     print("\nIMDVSv2 Checks:\n")
+    # print(response["Reservations"])
     for x in response["Reservations"]:
-        y = x["Instances"][0]["MetadataOptions"]["HttpTokens"]
+        imdvsStatus = x["Instances"][0]["MetadataOptions"]["HttpTokens"]
 
-        if y == "optional":
+        if imdvsStatus == "optional":
             print("FAIL: IMDVSv2 is not enforced on " + x["Instances"][0]["InstanceId"])
-        else:
+        elif imdvsStatus == 'required':
             print("SUCCESS: IMDVSv2 is enabled for " + x["Instances"][0]["InstanceId"])
+        else:
+            print("Unable to check IMDVSv2 status for " + x["Instances"][0]["InstanceId"])
     
     #IMP: Check for 0.0.0.0/0 rule for SSH (22) and RDP (3389) for each instance
     print("\nSecurityGroups Checks:\n")
+
     for x in response2["SecurityGroups"]:
         if x["IpPermissions"] == []:
-            print("\tWARN: There are no inbound rules for Security Group " +  x["GroupId"])
-        else:
-            for y in x["IpPermissions"]:
-                if y["FromPort"] == 3389 and y["FromPort"] == 22:
-                    print(x["GroupId"] + "\nFAIL: Port 3389 (RDP) is open to all traffic (0.0.0.0/0) on this Instance.\nFAIL: Port 22 (SSH) is open to all traffic (0.0.0.0/0) on this Instance.")
-                elif y["FromPort"] == 22:
-                    print(x["GroupId"] + "\nFAIL: Port 22 (SSH) is open to all traffic (0.0.0.0/0) on this Instance.\n")
-                elif y["FromPort"] == 3389:
-                    print(x["GroupId"] + "\nFAIL: Port 3389 (RDP) is open to all traffic (0.0.0.0/0) on this Instance.\n")
-                else:
-                    print("SUCCESS: no SSH or RDP ports open to all traffic (0.0.0.0/0) on this Instance.")
+            print("WARN: Security Group \'" + x["GroupId"] + "\' has no inbound rules")
+        for y in x["IpPermissions"]:
+            if y["FromPort"] == 22:
+                print("\nFAIL: Security Group \'" + x["GroupId"] + "\' has Port 22 (SSH) open to all traffic (0.0.0.0/0).\n")
+            elif y["FromPort"] == 3389:
+                print("\nFAIL: Security Group \'" + x["GroupId"] + "\' has Port 3389 (RDP) open to all traffic (0.0.0.0/0).\n")
+            else:
+                print("SUCCESS: no SSH or RDP ports open to all traffic (0.0.0.0/0) on this Instance.")
+
 
     #IMP: Get the Instance ID for any Instances with AutoScalingGroup
     print("\nAutoScaling Checks:\n")
@@ -64,7 +68,6 @@ def run_checks():
 
 
 
-
         #Used to test functionality as instances were not older than 7 days during implementation        
         # threeHours = 36000
 
@@ -85,7 +88,7 @@ def run_checks():
         # else:
         #     print("ERROR: This instance is older than 3 hours.")
 
-def idToName():
-    print("TBD")
-idToName()
+# def idToName():
+#     print("TBD")
+# idToName()
 run_checks()
