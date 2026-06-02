@@ -4,7 +4,7 @@ import datetime as dt
 
 
 def run_checks():
-    #Open the client to connect to ec2 instances available in AWS
+    #Global variable definition for this function
     accessPoint = boto3.client('ec2')
     autoScaleAP = boto3.client('autoscaling')
     response = accessPoint.describe_instances()
@@ -65,30 +65,3 @@ def run_checks():
                 print("FAIL: InstanceId " + str(instanceId) + " is older than 7 days and not assigned to an AutoScalingGroup")
         else:
             print("SUCCESS: InstanceId " + str(instanceId) + " is assigned to an AutoScalingGroup")
-
-
-
-        #Used to test functionality as instances were not older than 7 days during implementation        
-        # threeHours = 36000
-
-        # if instanceId not in instances2:
-        #     print("InstanceId " + str(instanceId) + " is not assigned to an AutoScalingGroup")
-        #     if timeCreated >= nowTime - threeHours:
-        #         print("WARN: This instance is younger than 10 hours but not assigned to an AutoScalingGroup")
-        #     else:
-        #         print("FAIL: This instance is older than 10 hours and not assigned to an AutoScalingGroup")
-        # else:
-        #     print("InstanceId " + str(instanceId) + " is assigned to an AutoScalingGroup")
-    
-        
-        # threeHours = 12000
-
-        # if timeCreated >= nowTime - threeHours:
-        #     print("SUCCESS: This instance is younger than 3 hours.")
-        # else:
-        #     print("ERROR: This instance is older than 3 hours.")
-
-# def idToName():
-#     print("TBD")
-# idToName()
-run_checks()
