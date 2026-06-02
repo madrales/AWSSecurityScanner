@@ -20,19 +20,22 @@ def run_checks():
         else:
             print("Unable to evaluate state for volume \'" + x["VolumeId"] + "\' in Instance ID \'" + x["Attachments"][0]["InstanceId"] + "\'.")
     
-    return print(failures)
 
     #IMP: checking encryption of volumes
-    # print("\n\nChecking volumes for encryption...")
-    # for x in volumes["Volumes"]:
-    #     if x["Encrypted"] == False:
-    #         print("FAIL: \'" + x["VolumeId"] + "\' is not encrypted.")
-    #     elif x["Encrypted"] == True:
-    #         print("PASS: \'" + x["VolumeId"] + "\' is encrypted.")
-    #     else:
-    #         print("Unable to evaluate encryption for volume \'" + x["VolumeId"] + "\' in Instance ID \'" + x["Attachments"][0]["InstanceId"] + "\'.")
+    print("\n\nChecking volumes for encryption...")
+    for x in volumes["Volumes"]:
+        if x["Encrypted"] == False:
+            # print("FAIL: \'" + x["VolumeId"] + "\' is not encrypted.")
+            failures.append("FAIL: \'" + x["VolumeId"] + "\' is not encrypted.")
+        elif x["Encrypted"] == True:
+            # print("PASS: \'" + x["VolumeId"] + "\' is encrypted.")
+            successes.append("PASS: \'" + x["VolumeId"] + "\' is encrypted.")
+        else:
+            print("Unable to evaluate encryption for volume \'" + x["VolumeId"] + "\' in Instance ID \'" + x["Attachments"][0]["InstanceId"] + "\'.")
 
-    # if len(failures) == 0:
-    #     return "There are no failures found"
-    # elif len(failures) > 0:
-    #     return failures
+    if len(failures) == 0:
+        return "There are no failures found"
+    elif len(failures) > 0:
+        return print(failures)
+    
+    #This is currently overwriting the failures when there are multiple. WIP
