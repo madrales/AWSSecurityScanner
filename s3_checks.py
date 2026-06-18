@@ -5,8 +5,11 @@ def run_checks():
     #Global variable definition for this function
     client = boto3.client('s3')
     buckets = []
-    failures = {}
-    successes = {}
+    violations = []
+    aclDict = {}
+    polDict = {}
+    versDict = {}
+    # successes = {}
 
 
     response = client.list_buckets()
@@ -21,7 +24,14 @@ def run_checks():
         for z in y["Grants"]:
             if "URI" in z["Grantee"]:
                 if z["Grantee"]["URI"] == "http://acs.amazonaws.com/groups/global/AllUsers":
-                    print("FAIL: Public ACL policy discovered: \'" + z["Grantee"]["URI"] + "\'")
+                    # print("FAIL: Public ACL policy discovered: \'" + z["Grantee"]["URI"] + "\'")
+                    aclDict["severity"] = "HIGH"
+                    aclDict["service"] = "S3"
+                    # aclDict["resource"] = x["VolumeId"]
+                    aclDict["issue"] = "Resource has a Public ACL policy."
+                    aclDict["recommendation"] = "Edit the ACL to restrict access."
+                    violations.append(aclDict)
+                    
 
     #DONE: Checks for public policies (Principal == *)
 
@@ -36,9 +46,15 @@ def run_checks():
                 indicator = 0
 
             if indicator > 0:
-                print("FAIL: Bucket \'" + x + "\' has a public bucket policy.")
-            elif indicator == 0:
-                print("PASS: Bucket \'" + x + "\' does not have a public bucket policy.")
+                # print("FAIL: Bucket \'" + x + "\' has a public bucket policy.")
+                polDict["severity"] = "HIGH"
+                polDict["service"] = "S3"
+                # aclDict["resource"] = x["VolumeId"]
+                polDict["issue"] = "Resource has a public bucket policy."
+                polDict["recommendation"] = "Edit the policy to restrict access."
+                violations.append(polDict)
+            # elif indicator == 0:
+                # print("PASS: Bucket \'" + x + "\' does not have a public bucket policy.")
 
 
 
@@ -49,9 +65,21 @@ def run_checks():
         try:
             y = client.get_bucket_versioning(Bucket = x)["Status"]
             if y == "Enabled":
-                print("SUCCESS: Bucket \'" + x + "\' does have versioning enabled.")
+                # print("SUCCESS: Bucket \'" + x + "\' does have versioning enabled.")
+                continue
         except:
-            print("FAIL: Bucket \'" + x + "\' does not have versioning enabled.")
+            # print("FAIL: Bucket \'" + x + "\' does not have versioning enabled.")
+            versDict["severity"] = "HIGH"
+            versDict["service"] = "S3"
+            # aclDict["resource"] = x["VolumeId"]
+            versDict["issue"] = "Resource does not have versioning enabled."
+            versDict["recommendation"] = "Edit the resource to allow versioning."
+            violations.append(versDict)
 
     #IMP: Buckets without server-side encryption
     #Seems like server-side encryption is enabled by default in free tier and you can not change this.
+
+    if len(violations) == 0:
+      return "There are no violations found"
+    elif len(violations) > 0:
+      return violations

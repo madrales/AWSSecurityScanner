@@ -29,7 +29,7 @@ def run_checks():
     
 
     #IMP: checking encryption of volumes
-    print("\n\nChecking volumes for encryption...")
+    # print("\n\nChecking volumes for encryption...")
     for x in volumes["Volumes"]:
         if x["Encrypted"] == False:
             vioDict["severity"] = "HIGH"
@@ -44,11 +44,7 @@ def run_checks():
         else:
             print("Unable to evaluate encryption for volume \'" + x["VolumeId"] + "\' in Instance ID \'" + x["Attachments"][0]["InstanceId"] + "\'.")
     
-    return violations
-
-    # if len(failures) == 0:
-    #     return "There are no failures found"
-    # elif len(failures) > 0:
-    #     return print(failures)
-    
-    #This is currently overwriting the failures when there are multiple. WIP
+    if len(violations) == 0:
+      return "There are no violations found"
+    elif len(violations) > 0:
+      return violations
