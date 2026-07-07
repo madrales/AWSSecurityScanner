@@ -40,7 +40,9 @@ def run():
     report["account_id"] = response['AccountId']
     report["violations"] = violations
     report["summary"] = summary
-    print(json.dumps(report, indent = 4))
+    export = json.dumps(report, indent = 4)
+
+    return export
 
 
 run()
