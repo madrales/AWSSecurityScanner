@@ -32,7 +32,7 @@ def run_checks():
     # print("\n\nChecking volumes for encryption...")
     for x in volumes["Volumes"]:
         if x["Encrypted"] == False:
-            vioDict["severity"] = "HIGH"
+            vioDict["severity"] = "LOW"
             vioDict["service"] = "EBS"
             vioDict["resource"] = x["VolumeId"]
             vioDict["issue"] = "Volume is not encrypted."

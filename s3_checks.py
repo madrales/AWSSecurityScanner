@@ -47,7 +47,7 @@ def run_checks():
 
             if indicator > 0:
                 # print("FAIL: Bucket \'" + x + "\' has a public bucket policy.")
-                polDict["severity"] = "HIGH"
+                polDict["severity"] = "MED"
                 polDict["service"] = "S3"
                 # aclDict["resource"] = x["VolumeId"]
                 polDict["issue"] = "Resource has a public bucket policy."
@@ -69,7 +69,7 @@ def run_checks():
                 continue
         except:
             # print("FAIL: Bucket \'" + x + "\' does not have versioning enabled.")
-            versDict["severity"] = "HIGH"
+            versDict["severity"] = "MED"
             versDict["service"] = "S3"
             # aclDict["resource"] = x["VolumeId"]
             versDict["issue"] = "Resource does not have versioning enabled."
