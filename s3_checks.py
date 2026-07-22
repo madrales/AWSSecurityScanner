@@ -49,7 +49,7 @@ def run_checks():
                 # print("FAIL: Bucket \'" + x + "\' has a public bucket policy.")
                 polDict["severity"] = "MED"
                 polDict["service"] = "S3"
-                versDict["resource"] = x
+                polDict["resource"] = x
                 polDict["issue"] = "Resource has a public bucket policy."
                 polDict["recommendation"] = "Edit the policy to restrict access."
                 violations.append(polDict)

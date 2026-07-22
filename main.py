@@ -17,13 +17,20 @@ def run():
     medCount = 0
     lowCount = 0
 
+    highVio = []
+    medVio = []
+    lowVio = []
+
     for vio in violations:
         if vio["severity"] == "HIGH":
             highCount += 1
+            highVio.append(vio)
         elif vio["severity"] == "MED":
             medCount += 1
+            medVio.append(vio)
         elif vio["severity"] == "LOW":
             lowCount += 1
+            lowVio.append(vio)
         else:
             print("Unable to evaluate")
     
@@ -38,11 +45,11 @@ def run():
     report = {}
     report["generated_at"] = str(dt.datetime.now())
     report["account_id"] = response['AccountId']
-    report["violations"] = violations
+    report["high_violations"] = highVio
+    report["med_violations"] = medVio
+    report["low_violations"] = lowVio
     report["summary"] = summary
-    export = json.dumps(report, indent = 4)
 
-    return export
-
+    return report
 
 run()
