@@ -9,8 +9,6 @@ def run_checks():
     aclDict = {}
     polDict = {}
     versDict = {}
-    # successes = {}
-
 
     response = client.list_buckets()
     for x in response["Buckets"]:
@@ -24,7 +22,6 @@ def run_checks():
         for z in y["Grants"]:
             if "URI" in z["Grantee"]:
                 if z["Grantee"]["URI"] == "http://acs.amazonaws.com/groups/global/AllUsers":
-                    # print("FAIL: Public ACL policy discovered: \'" + z["Grantee"]["URI"] + "\'")
                     aclDict["severity"] = "HIGH"
                     aclDict["service"] = "S3"
                     aclDict["resource"] = x
@@ -46,29 +43,21 @@ def run_checks():
                 indicator = 0
 
             if indicator > 0:
-                # print("FAIL: Bucket \'" + x + "\' has a public bucket policy.")
-                polDict["severity"] = "MED"
+                polDict["severity"] = "HIGH"
                 polDict["service"] = "S3"
                 polDict["resource"] = x
                 polDict["issue"] = "Resource has a public bucket policy."
                 polDict["recommendation"] = "Edit the policy to restrict access."
                 violations.append(polDict)
-            # elif indicator == 0:
-                # print("PASS: Bucket \'" + x + "\' does not have a public bucket policy.")
-
-
 
     # #IMP: Buckets without versioning enabled
     
-
     for x in buckets:
         try:
             y = client.get_bucket_versioning(Bucket = x)["Status"]
             if y == "Enabled":
-                # print("SUCCESS: Bucket \'" + x + "\' does have versioning enabled.")
                 continue
         except:
-            # print("FAIL: Bucket \'" + x + "\' does not have versioning enabled.")
             versDict["severity"] = "MED"
             versDict["service"] = "S3"
             versDict["resource"] = x

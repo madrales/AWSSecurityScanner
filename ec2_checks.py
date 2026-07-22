@@ -17,30 +17,21 @@ def run_checks():
 
 
     #IMP: Check for IMDVSv2, must be required
-    # print("\nIMDVSv2 Checks:\n")
-    # print(response["Reservations"])
     for x in response["Reservations"]:
         imdvsStatus = x["Instances"][0]["MetadataOptions"]["HttpTokens"]
 
         if imdvsStatus == "optional":
-            # print("FAIL: IMDVSv2 is not enforced on " + x["Instances"][0]["InstanceId"])
-            imdvsDict["severity"] = "HIGH"
+            imdvsDict["severity"] = "MED"
             imdvsDict["service"] = "EC2"
             imdvsDict["resource"] = x["Instances"][0]["InstanceId"]
             imdvsDict["issue"] = "Resource does not have IMDVSv2 enabled."
             imdvsDict["recommendation"] = "Edit the resource to require IMDVSv2."
             violations.append(imdvsDict)
-        # elif imdvsStatus == 'required':
-        #     print("SUCCESS: IMDVSv2 is enabled for " + x["Instances"][0]["InstanceId"])
-        # else:
-        #     print("Unable to check IMDVSv2 status for " + x["Instances"][0]["InstanceId"])
     
     #IMP: Check for 0.0.0.0/0 rule for SSH (22) and RDP (3389) for each instance
-    # print("\nSecurityGroups Checks:\n")
 
     for x in response2["SecurityGroups"]:
         if x["IpPermissions"] == []:
-            # print("WARN: Security Group \'" + x["GroupId"] + "\' has no inbound rules")
             portDict["severity"] = "LOW"
             portDict["service"] = "EC2"
             portDict["resource"] = x["Instances"][0]["InstanceId"]
@@ -49,7 +40,6 @@ def run_checks():
             violations.append(portDict)
         for y in x["IpPermissions"]:
             if y["FromPort"] == 22:
-                # print("\nFAIL: Security Group \'" + x["GroupId"] + "\' has Port 22 (SSH) open to all traffic (0.0.0.0/0).\n")
                 portDict["severity"] = "HIGH"
                 portDict["service"] = "EC2"
                 portDict["resource"] = x["GroupId"]
@@ -57,7 +47,6 @@ def run_checks():
                 portDict["recommendation"] = "Edit the inbound rules for the resource's Security Groups."
                 violations.append(portDict)
             elif y["FromPort"] == 3389:
-                # print("\nFAIL: Security Group \'" + x["GroupId"] + "\' has Port 3389 (RDP) open to all traffic (0.0.0.0/0).\n")
                 portDict["severity"] = "HIGH"
                 portDict["service"] = "EC2"
                 portDict["resource"] = x["GroupId"]
@@ -65,12 +54,10 @@ def run_checks():
                 portDict["recommendation"] = "Edit the inbound rules for the resource's Security Groups."
                 violations.append(portDict)
             else:
-                # print("SUCCESS: no SSH or RDP ports open to all traffic (0.0.0.0/0) on this Instance.")
                 continue
 
 
     #IMP: Get the Instance ID for any Instances with AutoScalingGroup
-    # print("\nAutoScaling Checks:\n")
     instancesWithAS = response3["AutoScalingInstances"]
     instances2 = []
     for x in instancesWithAS:
@@ -88,25 +75,21 @@ def run_checks():
         sevenDays = 604800
 
         if instanceId not in instances2:
-            # print("WARN: InstanceId " + str(instanceId) + " is not assigned to an AutoScalingGroup")
             if timeCreated >= nowTime - sevenDays:
-                # print("\tWARN: InstanceId " + str(instanceId) + " is younger than 7 days but not assigned to an AutoScalingGroup")
-                asgDict["severity"] = "HIGH"
+                asgDict["severity"] = "LOW"
                 asgDict["service"] = "EC2"
                 asgDict["resource"] = str(instanceId)
                 asgDict["issue"] = "Resource is younger than 7 days but not assigned to an AutoScalingGroup."
                 asgDict["recommendation"] = "Assign the resource to an AutoScalingGroup."
                 violations.append(asgDict)
             else:
-                # print("FAIL: InstanceId " + str(instanceId) + " is older than 7 days and not assigned to an AutoScalingGroup")
-                asgDict["severity"] = "HIGH"
+                asgDict["severity"] = "LOW"
                 asgDict["service"] = "EC2"
                 asgDict["resource"] = str(instanceId)
                 asgDict["issue"] = "Resource is older than 7 days and not assigned to an AutoScalingGroup."
                 asgDict["recommendation"] = "Assign the resource to an AutoScalingGroup."
                 violations.append(asgDict)
         else:
-            # print("SUCCESS: InstanceId " + str(instanceId) + " is assigned to an AutoScalingGroup")
             continue
 
     if len(violations) == 0:
