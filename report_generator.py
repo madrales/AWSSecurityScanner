@@ -10,4 +10,18 @@ app = Flask(__name__)
 
 def generate():
     input = run_checks()
-    return json2html.convert(json = input)
+    x = json2html.convert(json = input, table_attributes = "id = \"mainTable\"")
+    y = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <link rel="stylesheet" href="/static/styles.css">
+        <title>AWSSecurityScanner</title>
+    </head>
+    <body>
+        <a id = "title">AWS Security Scanner</a>
+        {x}
+    </body>
+    </html>
+    """
+    return y

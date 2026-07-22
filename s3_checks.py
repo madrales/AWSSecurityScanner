@@ -27,7 +27,7 @@ def run_checks():
                     # print("FAIL: Public ACL policy discovered: \'" + z["Grantee"]["URI"] + "\'")
                     aclDict["severity"] = "HIGH"
                     aclDict["service"] = "S3"
-                    # aclDict["resource"] = x["VolumeId"]
+                    aclDict["resource"] = x
                     aclDict["issue"] = "Resource has a Public ACL policy."
                     aclDict["recommendation"] = "Edit the ACL to restrict access."
                     violations.append(aclDict)
@@ -49,7 +49,7 @@ def run_checks():
                 # print("FAIL: Bucket \'" + x + "\' has a public bucket policy.")
                 polDict["severity"] = "MED"
                 polDict["service"] = "S3"
-                # aclDict["resource"] = x["VolumeId"]
+                versDict["resource"] = x
                 polDict["issue"] = "Resource has a public bucket policy."
                 polDict["recommendation"] = "Edit the policy to restrict access."
                 violations.append(polDict)
@@ -71,7 +71,7 @@ def run_checks():
             # print("FAIL: Bucket \'" + x + "\' does not have versioning enabled.")
             versDict["severity"] = "MED"
             versDict["service"] = "S3"
-            # aclDict["resource"] = x["VolumeId"]
+            versDict["resource"] = x
             versDict["issue"] = "Resource does not have versioning enabled."
             versDict["recommendation"] = "Edit the resource to allow versioning."
             violations.append(versDict)

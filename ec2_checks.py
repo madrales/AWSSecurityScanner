@@ -43,7 +43,7 @@ def run_checks():
             # print("WARN: Security Group \'" + x["GroupId"] + "\' has no inbound rules")
             portDict["severity"] = "LOW"
             portDict["service"] = "EC2"
-            # portDict["resource"] = x["Instances"][0]["InstanceId"]
+            portDict["resource"] = x["Instances"][0]["InstanceId"]
             portDict["issue"] = "Resource has no inbound rules."
             portDict["recommendation"] = "Review the inbound rules for the resource's Security Groups to ensure there should be no inbound rules."
             violations.append(portDict)
@@ -52,7 +52,7 @@ def run_checks():
                 # print("\nFAIL: Security Group \'" + x["GroupId"] + "\' has Port 22 (SSH) open to all traffic (0.0.0.0/0).\n")
                 portDict["severity"] = "HIGH"
                 portDict["service"] = "EC2"
-                # portDict["resource"] = x["Instances"][0]["InstanceId"]
+                portDict["resource"] = x["GroupId"]
                 portDict["issue"] = "Resource has Port 22 (SSH) open to all traffic (0.0.0.0/0)."
                 portDict["recommendation"] = "Edit the inbound rules for the resource's Security Groups."
                 violations.append(portDict)
@@ -60,7 +60,7 @@ def run_checks():
                 # print("\nFAIL: Security Group \'" + x["GroupId"] + "\' has Port 3389 (RDP) open to all traffic (0.0.0.0/0).\n")
                 portDict["severity"] = "HIGH"
                 portDict["service"] = "EC2"
-                # portDict["resource"] = x["Instances"][0]["InstanceId"]
+                portDict["resource"] = x["GroupId"]
                 portDict["issue"] = "Resource has Port 3389 (RDP) open to all traffic (0.0.0.0/0)."
                 portDict["recommendation"] = "Edit the inbound rules for the resource's Security Groups."
                 violations.append(portDict)

@@ -1,0 +1,111 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 2rem;
+    color: #1a1a1a;
+  }
+  
+  /* Outer report table acts as a key/value layout, not a grid */
+  #mainTable {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: collapse;
+    text-align: left;
+    margin: 0 auto;
+  }
+  
+  #mainTable > tbody > tr {
+    display: block;
+    border: none;
+    margin-bottom: 1.5rem;
+  }
+  
+  #mainTable > tbody > tr > th,
+  #mainTable > tbody > tr > td {
+    display: block;
+    text-align: left;
+    padding: 0.25rem 0;
+  }
+  
+  #mainTable > tbody > tr > th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
+    font-weight: 600;
+  }
+  
+  /* The list of violation "modules" */
+  #mainTable ul {
+    display: flex;
+    flex-wrap: wrap;          /* <-- this is the key fix: wrap instead of overflow */
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+    justify-content: flex-start;
+  }
+  
+  #mainTable ul li {
+    display: block;           /* stop each card from being a flex row internally */
+    flex: 0 1 280px;
+    background: #ffffff;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+  
+  /* Nested per-violation table inside each card */
+  #mainTable ul li table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #mainTable ul li table tr {
+    border: none;
+    background: transparent;
+  }
+  
+  #mainTable ul li table th,
+  #mainTable ul li table td {
+    display: table-cell;
+    text-align: left;
+    vertical-align: top;
+    padding: 0.3rem 0.4rem;
+    border-bottom: 1px solid #eef1f4;
+    font-size: 0.9rem;
+  }
+  
+  #mainTable ul li table th {
+    width: 35%;
+    color: #555;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  
+  #mainTable ul li table tr:last-child th,
+  #mainTable ul li table tr:last-child td {
+    border-bottom: none;
+  }
+/* The list of violation "modules" */
+#mainTable ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+  }
+  
+  #mainTable ul li {
+    display: block;
+    background: #ffffff;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
