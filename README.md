@@ -10,9 +10,14 @@
 - IAM User & Permissions
   - Create an IAM user with a policy that allows read-only access across EC2, S3, and EBS to follow the concept of least-privilege. Will provide real experience into why authorization is required after authentication; users should only be able to access the resources they need to complete a task, no more, no less.
 #### Local Dependencies
+- Using a Python Virtual Environment for the dependencies helps to reduce any errors that can be isolated on one user's machine. This venv allows for isolated dependencies. Imagine that you need Python 3.9 or older for a specific program on your local machine, the venv allows for the Python 3.10 dependency to have its own Python installation that does not conflict with your local installation.
+##### Windows Specific
+- Run ```python -m venv venv``` to create a venv and ```venv\Scripts\Activate.ps1``` to activate the venv
+  - ***NOTE:** if you run into an UnauthorizedAccess error, run ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass``` to allow the execution of scripts. If you can not switch this setting on your local machine, you can also run these commands via CMD in Windows.*
 - Python 3.10+
 - AWS CLI configured
 - boto3 (```pip install boto3```)
+- jsontohtml (```pip install jsont2html```)
 
 #### Objectives:
 - What the Scanner Should Check
