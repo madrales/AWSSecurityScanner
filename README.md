@@ -6,7 +6,7 @@
 
 #### Prerequisites & Setup
 - AWS Account
-  - A free tier account is sufficient. You be required to setup EC2 instances, S3 Buckets, and EBS resources with the specific violations mentioned in this project, or connect this project to a live AWS account to analyze the security violations.
+  - A free tier account is sufficient. You will be required to setup EC2 instances, S3 Buckets, and EBS resources with the specific violations mentioned in this project, or connect this project to a live AWS account to analyze the security violations.
 - IAM User & Permissions
   - Create an IAM user with a policy that allows read-only access across EC2, S3, and EBS to follow the concept of least-privilege. Will provide real experience into why authorization is required after authentication; users should only be able to access the resources they need to complete a task, no more, no less.
 #### Local Dependencies
@@ -15,7 +15,7 @@
 - AWS CLI configured
 - Flask (```pip install flask```)
 - boto3 (```pip install boto3```)
-- jsontohtml (```pip install jsont2html```)
+- json2html (```pip install jsont2html```)
 ##### Windows Specific
 - Run ```python -m venv venv``` to create a venv and ```venv\Scripts\Activate.ps1``` to activate the venv
   - ***NOTE:** if you run into an UnauthorizedAccess error, run ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass``` to allow the execution of scripts. If you can not switch this setting on your local machine, you can also run these commands via CMD in Windows.*
@@ -55,13 +55,13 @@
       - Determined to be low priority as an EC2 resource not attached to an auto-scaling group poses a small risk to the total security of the tenancy. The impact is realized on the financial side as an un-used resource still incurs cost, but there is also an availability impact as instance not attached to an auto-scaling group would not comeback online if there was a termination of the instance.
     - Security groups with port 22 or 3389 open to 0.0.0.0/0
       - Implements Boto3's ```client.describe_security_groups()``` method to evaluate whether or not a Security Group has all traffic open for SSH or RDP.
-      - Determined to be a high priority violation due to the globally open access to the resource. There is not any filtering going on for these Security Groups so anyone, including bad actors, can access this resouce. This poses an emergency risk to the tenancy and all resources within.
+      - Determined to be a high priority violation due to the globally open access to the resource. There is not any filtering going on for these Security Groups so anyone, including bad actors, can access this resource. This poses an emergency risk to the tenancy and all resources within.
     - Instances not using IMDSv2
       - Implements Boto3's ```client.describe_instances()``` method to evaluate if the MetadataOptions include a HttpTokens set to "optional". If so, a medium violation is returned.
       - Determined to be a medium priority as IMDSv1 is no longer supported due to well known exploits. This poses a security risk to the entire tenancy, however this is a quick fix that can be toggled in the Cloud Console.
   - EBS Violations
     - Unencrypted volumes
-      - Implements Boto3's ```client.describe_volumes()``` method to evaluate if a volume has it's Encryption property set to False. If so, a high priority violation is returned.
+      - Implements Boto3's ```client.describe_volumes()``` method to evaluate if a volume has its Encryption property set to False. If so, a high priority violation is returned.
       - Determined to be high priority as an unencrypted volume poses a major security risk to all data on the EBS resource and can have upstream impacts to the entire tenancy if exposed.
     - Volumes in "available" state (detached and costing money doing nothing)
       - Implements Boto3's ```client.describe_volumes()``` method to evaluate if a volume is in "Available" state. If so, a low priority violation is returned.
@@ -73,5 +73,5 @@
 - Hands-on experience with AWS IAM; creating users, adding permissions, and managing resources with the principle of least privilege.
 - Utilized Boto3 to establish client sessions that can query resource information such as ID and name but also attributes that can indicate a security violation
 - Discovered the json2html Python Library that helps translate JSON into HTML table fragments directly
-- Python Virtual Environments allow for a seamless dependency resolution as you can install any dependencies within the virtual environment rather that directly to your local
+- Python Virtual Environments allow for a seamless dependency resolution as you can install any dependencies within the virtual environment rather than directly to your local
 - Development on Git Branches and merged feature branches back into a development branch before logging a PR to merge into main when the MVP was completed.
