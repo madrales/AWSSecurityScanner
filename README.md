@@ -58,7 +58,7 @@
       - Determined to be a high priority violation due to the globally open access to the resource. There is not any filtering going on for these Security Groups so anyone, including bad actors, can access this resouce. This poses an emergency risk to the tenancy and all resources within.
     - Instances not using IMDSv2
       - Implements Boto3's ```client.describe_instances()``` method to evaluate if the MetadataOptions include a HttpTokens set to "optional". If so, a medium violation is returned.
-      - Determined to be a medium priority as IMDSv2 is no longer support due to well known exploits. This poses a security risk to the entire tenancy, however this is a quick fix that can be toggled in the Cloud Console.
+      - Determined to be a medium priority as IMDSv1 is no longer supported due to well known exploits. This poses a security risk to the entire tenancy, however this is a quick fix that can be toggled in the Cloud Console.
   - EBS Violations
     - Unencrypted volumes
       - Implements Boto3's ```client.describe_volumes()``` method to evaluate if a volume has it's Encryption property set to False. If so, a high priority violation is returned.
