@@ -1,6 +1,6 @@
 ### AWSSecurityScanner
 #### Problem Statement:
- - Create a Python CLI tool that connects to your AWS account, scans for common security and cost violations, and produces a structured report. It then runs automatically on a schedule via AWS Lambda + CloudWatch Events.
+ - Create a Python CLI tool that connects to your AWS account, scans for common security and cost violations, and produces a structured report.
 
 ---
 
